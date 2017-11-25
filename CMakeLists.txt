@@ -58,11 +58,20 @@ if(BUILD_SHARED_LIB)
 else()
    message(STATUS "*** Option BUILD_SHARED_LIB is OFF ${LIB_TYPE}")
 endif()
-# Total libs 0, exes 1
+# Total libs 1, several exes
 #################################################
-##### LIBRARIES 0 #####
+##### LIBRARIES 1 #####
 #################################################
-#list(APPEND add_LIBS ${name})
+set(name cry_utils)
+set(dir .)
+set(${name}_SRCS
+    ${dir}/cry_utils.c
+    )
+set(${name}_HDRS
+    ${dir}/cry_utils.h
+    )
+add_library( ${name} ${LIB_TYPE} ${${name}_SRCS} ${${name}_HDRS} )
+list(APPEND add_LIBS ${name})
 # deal with install, if any...
 #install( TARGETS ${name}
 #    RUNTIME DESTINATION bin
@@ -70,7 +79,7 @@ endif()
 #    ARCHIVE DESTINATION lib )
 #install(FILES ${${name}_HDRS} DESTINATION include)
 #################################################
-##### EXECUTABLE 1 #####
+##### EXECUTABLE 2 #####
 #################################################
 set(name sha256_test)
 set(dir .)
@@ -80,6 +89,44 @@ set(${name}_SRCS
     )
 set(${name}_HDRS
     ${dir}/sha256.h
+    )
+add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
+if (add_LIBS)
+    target_link_libraries( ${name} ${add_LIBS} )
+endif ()
+if (MSVC)
+    set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
+endif ()
+# deal with install, if any...
+#install( TARGETS ${name} DESTINATION bin )
+
+set(name sha1_test)
+set(dir .)
+set(${name}_SRCS
+    ${dir}/sha1.c
+    ${dir}/sha1_test.c
+    )
+set(${name}_HDRS
+    ${dir}/sha1.h
+    )
+add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
+if (add_LIBS)
+    target_link_libraries( ${name} ${add_LIBS} )
+endif ()
+if (MSVC)
+    set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
+endif ()
+# deal with install, if any...
+#install( TARGETS ${name} DESTINATION bin )
+
+set(name md5_test)
+set(dir .)
+set(${name}_SRCS
+    ${dir}/md5.c
+    ${dir}/md5_test.c
+    )
+set(${name}_HDRS
+    ${dir}/md5.h
     )
 add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
 if (add_LIBS)
@@ -110,12 +157,8 @@ set(${name}_SRCS
     ${dir}/des_test.c
     ${dir}/md2.c
     ${dir}/md2_test.c
-    ${dir}/md5.c
-    ${dir}/md5_test.c
     ${dir}/rot-13.c
     ${dir}/rot-13_test.c
-    ${dir}/sha1.c
-    ${dir}/sha1_test.c
     )
 set(${name}_HDRS
     ${dir}/aes.h
@@ -124,9 +167,7 @@ set(${name}_HDRS
     ${dir}/blowfish.h
     ${dir}/des.h
     ${dir}/md2.h
-    ${dir}/md5.h
     ${dir}/rot-13.h
-    ${dir}/sha1.h
     )
 add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
 if (add_LIBS)

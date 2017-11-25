@@ -12,12 +12,11 @@
 *********************************************************************/
 
 /*************************** HEADER FILES ***************************/
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> /* for malloc, ... */
 #include <memory.h>
 #include <string.h>
+#include "cry_utils.h"
 #include "sha256.h"
 
 /*********************** FUNCTION DEFINITIONS ***********************/
@@ -70,37 +69,6 @@ static int out_Upper = 0;
 static BYTE check[SHA256_BLOCK_SIZE];
 static int got_Check = 0;
 
-#ifdef _MSC_VER
-#define M_IS_DIR _S_IFDIR
-#else // !_MSC_VER
-#define M_IS_DIR S_IFDIR
-#endif
-
-#define MDT_NONE 0
-#define MDT_FILE 1
-#define MDT_DIR  2
-
-static struct stat buf;
-int is_file_or_directory(const char * path)
-{
-    if (!path)
-        return MDT_NONE;
-    if (stat(path, &buf) == 0)
-    {
-        if (buf.st_mode & M_IS_DIR)
-            return MDT_DIR;
-        else
-            return MDT_FILE;
-    }
-    return MDT_NONE;
-}
-
-size_t get_last_file_size()
-{
-    return buf.st_size;
-}
-
-
 void give_help(char *name)
 {
     printf("%s: usage: [options] usr_input\n", module);
@@ -112,19 +80,6 @@ void give_help(char *name)
     printf("\n");
     printf(" Print BSD-style SHA256 checksum for the 'input' file.\n");
     // TODO: More help
-}
-
-/* Function which converts a hexadecimal digit character to its integer value */
-int hex_to_val(const char ch)
-{
-    if (ch >= '0' && ch <= '9')
-        return ch - '0';  /* Simple ASCII arithmetic */
-    else if (ch >= 'a' && ch <= 'f')
-        return 10 + ch - 'a';  /* Because hex-digit a is ten */
-    else if (ch >= 'A' && ch <= 'F')
-        return 10 + ch - 'A';  /* Because hex-digit A is ten */
-    else
-        return -1;  /* Not a valid hexadecimal digit */
 }
 
 int parse_args(int argc, char **argv)

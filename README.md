@@ -15,3 +15,7 @@ These algorithms are not optimized for speed or space. They are primarily design
 Building
 ---
 The source code for each algorithm will come in a pair of a source code file and a header file. There should be no inter-header file dependencies, no additional libraries, no platform-specific header files, or any other complicating matters. Compiling them should be as easy as adding the relevent source code to the project.
+
+20171125: Commenced to add a cmake cross-port building mechanism...
+
+; eof

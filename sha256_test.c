@@ -63,7 +63,7 @@ int test_main()
 	return(0);
 }
 
-static const char *module = "sha1_test";
+static const char *module = "sha256_test";
 
 static const char *usr_input = 0;
 static int out_Upper = 0;
@@ -108,8 +108,9 @@ void give_help(char *name)
     printf(" --help  (-h or -?) = This help and exit(0)\n");
     printf(" --upper       (-u) = Output string in uppercase.\n");
     printf(" --check <hex> (-c) = Compare results to this hex string.\n");
+    printf(" --test        (-t) = Run the original 'tests' and exit(0)\n");
     printf("\n");
-    printf(" Print BSD-style SHA256 checksum for the 'input' file.");
+    printf(" Print BSD-style SHA256 checksum for the 'input' file.\n");
     // TODO: More help
 }
 
@@ -179,6 +180,10 @@ int parse_args(int argc, char **argv)
                     return 1;
                 }
 
+                break;
+            case 't':
+                test_main();
+                return 2;
                 break;
                 // TODO: Other arguments
             default:

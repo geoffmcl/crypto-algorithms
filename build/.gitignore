@@ -10,3 +10,6 @@ cmake_install.cmake
 *.sln
 *.dir/*
 x64/*
+.vs/*
+*.VC.db
+

@@ -206,11 +206,11 @@ int main(int argc, char *argv[])
     sha1_update(&ctx, fbuf, len);
     sha1_final(&ctx, buf);
     free(fbuf);
-    printf("SHA1 (%s) = ", file);
     /* output */
     if (out_Upper)
         form = "%02X";
     if (BSD_Style) {
+        printf("SHA1 (%s) = ", file);
         for (i = 0; i < SHA1_BLOCK_SIZE; i++) {
             c = buf[i] & 0xff;
             printf(form, c);

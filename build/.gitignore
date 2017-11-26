@@ -12,4 +12,9 @@ cmake_install.cmake
 x64/*
 .vs/*
 *.VC.db
+libcry_utils.a
+md5_test
+sha1_test
+sha256_test
+Makefile
 

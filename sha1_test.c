@@ -65,6 +65,7 @@ static const char *usr_input = 0;
 static int out_Upper = 0;
 static BYTE check[SHA1_BLOCK_SIZE];
 static int got_Check = 0;
+static int BSD_Style = 0;
 
 void give_help(char *name)
 {
@@ -74,8 +75,9 @@ void give_help(char *name)
     printf(" --upper       (-u) = Output string in uppercase.\n");
     printf(" --check <hex> (-c) = Compare results to this hex string.\n");
     printf(" --TEST        (-T) = Run the original 'tests' and exit(0)\n");
+    printf(" --tag         (-t) = Create a BSD-style checksum.\n");
     printf("\n");
-    printf(" Print BSD-style SHA1 checksum for the 'input' file.\n");
+    printf(" Print SHA1 checksum for the 'input' file.\n");
     // TODO: More help
 }
 
@@ -137,7 +139,9 @@ int parse_args(int argc, char **argv)
                 test_main();
                 return 2;
                 break;
-                // TODO: Other arguments
+            case 't':
+                BSD_Style = 1;
+                break;
             default:
                 printf("%s: Unknown argument '%s'. Try -? for help...\n", module, arg);
                 return 1;
@@ -203,20 +207,30 @@ int main(int argc, char *argv[])
     sha1_final(&ctx, buf);
     free(fbuf);
     printf("SHA1 (%s) = ", file);
+    /* output */
     if (out_Upper)
         form = "%02X";
-    for (i = 0; i < SHA1_BLOCK_SIZE; i++) {
-        c = buf[i] & 0xff;
-        printf(form, c);
+    if (BSD_Style) {
+        for (i = 0; i < SHA1_BLOCK_SIZE; i++) {
+            c = buf[i] & 0xff;
+            printf(form, c);
+        }
+        if (got_Check) {
+            if (memcmp(check, buf, SHA1_BLOCK_SIZE)) {
+                printf(" check FAILED!");
+                iret = 1;
+            }
+            else {
+                printf(" Valid");
+            }
+        }
     }
-    if (got_Check) {
-        if (memcmp(check, buf, SHA1_BLOCK_SIZE)) {
-            printf(" check FAILED!");
-            iret = 1;
+    else {
+        for (i = 0; i < SHA1_BLOCK_SIZE; i++) {
+            c = buf[i] & 0xff;
+            printf(form, c);
         }
-        else {
-            printf(" Valid");
-        }
+        printf("  %s", file);
     }
     printf("\n");
     return iret;

@@ -75,7 +75,7 @@ void give_help(char *name)
     printf(" --help  (-h or -?) = This help and exit(0)\n");
     printf(" --upper       (-u) = Output string in uppercase.\n");
     printf(" --check <hex> (-c) = Compare results to this hex string.\n");
-    printf(" --test        (-t) = Run the original 'tests' and exit(0)\n");
+    printf(" --TEST        (-T) = Run the original 'tests' and exit(0)\n");
     printf("\n");
     printf(" Print BSD-style MD5 checksum for the 'input' file.\n");
     // TODO: More help
@@ -135,7 +135,7 @@ int parse_args(int argc, char **argv)
                 }
 
                 break;
-            case 't':
+            case 'T':
                 test_main();
                 return 2;
                 break;

@@ -1,5 +1,6 @@
 *.vcxproj
 *.filters
+*.user
 CMakeCache.txt
 CMakeFiles/*
 Debug/*
@@ -17,4 +18,5 @@ md5_test
 sha1_test
 sha256_test
 Makefile
+temp*
 

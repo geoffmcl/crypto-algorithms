@@ -82,6 +82,13 @@ void give_help(char *name)
     // TODO: More help
 }
 
+/*
+    int get_check_file(const char *file)
+    Sort of an 'input' files, that gives
+    (a) checksum to CHECK against calculated
+    (b) filename as the input file
+    Order presently has to be 'checksum-in-hex  filename-to-CHECK'
+*/
 int get_check_file(const char *file)
 {
     size_t len, sz, ii, off;

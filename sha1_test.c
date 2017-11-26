@@ -71,14 +71,107 @@ void give_help(char *name)
 {
     printf("%s: usage: [options] usr_input\n", module);
     printf("Options:\n");
-    printf(" --help  (-h or -?) = This help and exit(0)\n");
-    printf(" --upper       (-u) = Output string in uppercase.\n");
-    printf(" --check <hex> (-c) = Compare results to this hex string.\n");
-    printf(" --TEST        (-T) = Run the original 'tests' and exit(0)\n");
-    printf(" --tag         (-t) = Create a BSD-style checksum.\n");
+    printf(" --help   (-h or -?) = This help and exit(0)\n");
+    printf(" --upper        (-u) = Output string in uppercase.\n");
+    printf(" --CHECK <hex>  (-C) = Compare results to this hex string.\n");
+    printf(" --check <file> (-c) = Get checksum to validate and input file from file.\n");
+    printf(" --TEST         (-T) = Run the original 'tests' and exit(0)\n");
+    printf(" --tag          (-t) = Output a BSD-style checksum.\n");
     printf("\n");
     printf(" Print SHA1 checksum for the 'input' file.\n");
     // TODO: More help
+}
+
+int get_check_file(const char *file)
+{
+    size_t len, sz, ii, off;
+    FILE *fp;
+    BYTE *fbuf;
+    char *cp = NULL;
+    int c;
+    size_t sum_sz = SHA1_BLOCK_SIZE;
+
+    if (usr_input) {
+        printf("%s: Already have input file '%s'! Can not process a 'check' file '%s'?\n", module, usr_input, file);
+        return 1;
+    }
+
+    if (is_file_or_directory(file) != MDT_FILE) {
+        printf("Error: Can NOT stat file '%s'\n", file);
+        return 1;
+    }
+    off = get_last_file_size();
+    if (off < ((sum_sz * 2) + 2)) {
+        printf("Error: Size %u insufficient to contain checksum and file name!\n", (int)off);
+        return 1;
+    }
+    fp = fopen(file, "rb");
+    if (!fp) {
+        printf("Error: Can NOT open file '%s'\n", file);
+        return 1;
+    }
+    fbuf = (BYTE *)malloc(off + 1);
+    if (!fbuf) {
+        fclose(fp);
+        printf("Error: Memory failed on %u bytes\n", (int)off);
+        return 1;
+    }
+    sz = fread(fbuf, 1, off, fp);
+    fclose(fp);
+    if (sz != off) {
+        free(fbuf);
+        printf("Error: Read of file '%s' failed!\n", file);
+        return 1;
+    }
+    while (off) {
+        off--;
+        c = fbuf[off];
+        if (c > ' ') {
+            off++;
+            break;
+        }
+        fbuf[off] = 0;
+    }
+    if (off < ((sum_sz * 2) + 2)) {
+        free(fbuf);
+        printf("Error: File has insufficient characters %u to contain checksum and file name!\n", (int)off);
+        return 1;
+    }
+    // fish around to find 'checksum file_name', in that order
+    for (ii = 0, len = 0; ii < sum_sz; ii++, len += 2) {
+        c = hex_to_val(fbuf[len]);
+        if (c == -1) {
+            c = fbuf[len];
+            printf("%s: Error: checksum contains invalid char value %u\n", module, c);
+            return 1;
+        }
+        check[ii] = c * 16;
+        c = hex_to_val(fbuf[len + 1]);
+        if (c == -1) {
+            c = fbuf[len];
+            printf("%s: Error: checksum contains invalid char value %u\n", module, c);
+            return 1;
+        }
+        check[ii] += c;
+    }
+    // done leading checksum
+    // get to first filename character
+    for (; len < off; len++) {
+        c = fbuf[len];
+        if (c > ' ') {
+            cp = &fbuf[len];    // set beginning of filename
+            break;
+        }
+    }
+    if (!cp) {
+        free(fbuf);
+        printf("Error: Could NOT find input file name in '%s'\n", file);
+    }
+    // ok cp should be the input file
+    usr_input = strdup(cp);
+    free(fbuf);
+    got_Check = 1;
+    return 0;
 }
 
 int parse_args(int argc, char **argv)
@@ -107,22 +200,34 @@ int parse_args(int argc, char **argv)
                 if (i2 < argc) {
                     i++;
                     sarg = argv[i];
+                    if (get_check_file(sarg))
+                        return 1;
+                }
+                else {
+                    printf("%s: Error: Expected check file to follow '%s'\n", module, arg);
+                    return 1;
+                }
+                break;
+            case 'C':
+                if (i2 < argc) {
+                    i++;
+                    sarg = argv[i];
                     len = strlen(sarg);
                     if (len != (SHA1_BLOCK_SIZE * 2)) {
-                        printf("%s: Error: Expected SHA256 hex checksum of length %u, not %u\n", module,
+                        printf("%s: Error: Expected SHA1 hex checksum of length %u, not %u\n", module,
                             (int)(SHA1_BLOCK_SIZE * 2), (int)len);
                         return 1;
                     }
                     for (ii = 0, len = 0; ii < SHA1_BLOCK_SIZE; ii++, len += 2) {
                         c = hex_to_val(sarg[len]);
                         if (c == -1) {
-                            printf("%s: Error: SHA256 checksum contains invalid value %u\n", module, c);
+                            printf("%s: Error: SHA1 checksum contains invalid value %u\n", module, c);
                             return 1;
                         }
                         check[ii] = c * 16;
                         c = hex_to_val(sarg[len + 1]);
                         if (c == -1) {
-                            printf("%s: Error: SHA256 checksum contains invalid value %u\n", module, c);
+                            printf("%s: Error: SHA1 checksum contains invalid value %u\n", module, c);
                             return 1;
                         }
                         check[ii] += c;
@@ -163,22 +268,12 @@ int parse_args(int argc, char **argv)
     return 0;
 }
 
-int main(int argc, char *argv[])
+int get_checksum(const char *file, BYTE *buf)
 {
-    int iret, i, c;
     size_t len, sz;
-    BYTE *fbuf;
     FILE *fp;
-    BYTE buf[SHA1_BLOCK_SIZE];
+    BYTE *fbuf;
     SHA1_CTX ctx;
-    const char *form = "%02x";
-    iret = parse_args(argc, argv);
-    if (iret) {
-        if (iret == 2)
-            iret = 0;
-        return iret;
-    }
-    const char *file = usr_input;
     if (is_file_or_directory(file) != MDT_FILE) {
         printf("Error: Can NOT stat file '%s'\n", file);
         return 1;
@@ -206,6 +301,26 @@ int main(int argc, char *argv[])
     sha1_update(&ctx, fbuf, len);
     sha1_final(&ctx, buf);
     free(fbuf);
+    return 0;
+}
+
+int main(int argc, char *argv[])
+{
+    int iret, i, c;
+    BYTE buf[SHA1_BLOCK_SIZE];
+    const char *form = "%02x";
+    const char *file;
+    iret = parse_args(argc, argv);
+    if (iret) {
+        if (iret == 2)
+            iret = 0;
+        return iret;
+    }
+    file = usr_input;
+    iret = get_checksum(file, buf);
+    if (iret)
+        return iret;
+
     /* output */
     if (out_Upper)
         form = "%02X";
@@ -226,11 +341,23 @@ int main(int argc, char *argv[])
         }
     }
     else {
-        for (i = 0; i < SHA1_BLOCK_SIZE; i++) {
-            c = buf[i] & 0xff;
-            printf(form, c);
+        if (got_Check) {
+            printf("%s: ", file);
+            if (memcmp(check, buf, SHA1_BLOCK_SIZE)) {
+                printf(" check FAILED!");
+                iret = 1;
+            }
+            else {
+                printf(" Valid");
+            }
         }
-        printf("  %s", file);
+        else {
+            for (i = 0; i < SHA1_BLOCK_SIZE; i++) {
+                c = buf[i] & 0xff;
+                printf(form, c);
+            }
+            printf("  %s", file);
+        }
     }
     printf("\n");
     return iret;

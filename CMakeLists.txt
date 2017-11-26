@@ -73,13 +73,15 @@ set(${name}_HDRS
 add_library( ${name} ${LIB_TYPE} ${${name}_SRCS} ${${name}_HDRS} )
 list(APPEND add_LIBS ${name})
 # deal with install, if any...
+# but inteneded to be a local only static library of common functions...
 #install( TARGETS ${name}
 #    RUNTIME DESTINATION bin
 #    LIBRARY DESTINATION lib
 #    ARCHIVE DESTINATION lib )
 #install(FILES ${${name}_HDRS} DESTINATION include)
+
 #################################################
-##### EXECUTABLE 2 #####
+##### EXECUTABLE 3 #####
 #################################################
 set(name sha256_test)
 set(dir .)
@@ -98,7 +100,7 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-#install( TARGETS ${name} DESTINATION bin )
+install( TARGETS ${name} DESTINATION bin )
 
 set(name sha1_test)
 set(dir .)
@@ -117,7 +119,7 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-#install( TARGETS ${name} DESTINATION bin )
+install( TARGETS ${name} DESTINATION bin )
 
 set(name md5_test)
 set(dir .)
@@ -136,11 +138,10 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-#install( TARGETS ${name} DESTINATION bin )
+install( TARGETS ${name} DESTINATION bin )
 
 if (ADD_OTHER_EXES)
-# crypto-algotithms-fork EXECUTABLE from [F:\Projects\crypto-algotithms-fork],
-# have 20 C/C++ sources, 10 headers
+# These have yet to be built implemented... WIP...
 
 set(name crypto-algotithms-fork)
 set(dir .)

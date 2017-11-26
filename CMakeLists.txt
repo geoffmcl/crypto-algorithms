@@ -63,7 +63,7 @@ endif()
 ##### LIBRARIES 1 #####
 #################################################
 set(name cry_utils)
-set(dir .)
+set(dir src)
 set(${name}_SRCS
     ${dir}/cry_utils.c
     )
@@ -84,7 +84,7 @@ list(APPEND add_LIBS ${name})
 ##### EXECUTABLE 3 #####
 #################################################
 set(name sha256_test)
-set(dir .)
+set(dir src)
 set(${name}_SRCS
     ${dir}/sha256.c
     ${dir}/sha256_test.c
@@ -103,7 +103,7 @@ endif ()
 install( TARGETS ${name} DESTINATION bin )
 
 set(name sha1_test)
-set(dir .)
+set(dir src)
 set(${name}_SRCS
     ${dir}/sha1.c
     ${dir}/sha1_test.c
@@ -122,7 +122,7 @@ endif ()
 install( TARGETS ${name} DESTINATION bin )
 
 set(name md5_test)
-set(dir .)
+set(dir src)
 set(${name}_SRCS
     ${dir}/md5.c
     ${dir}/md5_test.c
@@ -144,7 +144,7 @@ if (ADD_OTHER_EXES)
 # These have yet to be built implemented... WIP...
 
 set(name crypto-algotithms-fork)
-set(dir .)
+set(dir src)
 set(${name}_SRCS
     ${dir}/aes.c
     ${dir}/aes_test.c

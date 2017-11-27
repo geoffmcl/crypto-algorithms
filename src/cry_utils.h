@@ -25,6 +25,9 @@ extern int hex_to_val(const char ch);
 extern int is_file_or_directory(const char * path);
 extern size_t get_last_file_size();
 
+#ifndef EndBuf
+#define EndBuf(a) (a + strlen(a))
+#endif
 
 #endif // #ifndef _CRY_UTILS_H_
 // eof - cry_utils.h

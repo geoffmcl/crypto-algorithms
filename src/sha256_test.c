@@ -69,6 +69,8 @@ static int out_Upper = 0;
 static BYTE check[SHA256_BLOCK_SIZE];
 static int got_Check = 0;
 static int BSD_Style = 0;
+static char *out_file = 0;
+static char out_buf[1024];
 
 void give_help(char *name)
 {
@@ -80,6 +82,7 @@ void give_help(char *name)
     printf(" --check <file> (-c) = Get checksum to validate and input file from file.\n");
     printf(" --TEST         (-T) = Run the original 'tests' and exit(0)\n");
     printf(" --tag          (-t) = Create a BSD-style checksum.\n");
+    printf(" --out <file>   (-o) = Write checksum to this file.\n");
     printf("\n");
     printf(" Print SHA256 checksum for the 'input' file.\n");
     // TODO: More help
@@ -126,6 +129,7 @@ int get_check_file(const char *file)
         printf("Error: Memory failed on %u bytes\n", (int)off);
         return 1;
     }
+    memset(fbuf, 0, off + 1);
     sz = fread(fbuf, 1, off, fp);
     fclose(fp);
     if (sz != off) {
@@ -258,6 +262,17 @@ int parse_args(int argc, char **argv)
             case 't':
                 BSD_Style = 1;
                 break;
+            case 'o':
+                if (i2 < argc) {
+                    i++;
+                    sarg = argv[i];
+                    out_file = strdup(sarg);
+                }
+                else {
+                    printf("%s: Error: Expected out file name to follow '%s'\n", module, arg);
+                    return 1;
+                }
+                break;
             default:
                 printf("%s: Unknown argument '%s'. Try -? for help...\n", module, arg);
                 return 1;
@@ -370,6 +385,34 @@ int main(int argc, char *argv[])
         }
     }
     printf("\n");
+    if (out_file) {
+        char *cp = out_buf;
+        FILE *fp;
+        *cp = 0;
+        for (i = 0; i < SHA256_BLOCK_SIZE; i++) {
+            c = buf[i] & 0xff;
+            sprintf(EndBuf(cp), form, c);
+        }
+        sprintf(EndBuf(cp),"  %s", file);
+        i = (int)strlen(cp);
+        fp = fopen(out_file, "wb");
+        if (fp) {
+            c = (int)fwrite(cp, 1, i, fp);
+            fclose(fp);
+            if (c == i) {
+                printf("%s: Checksum written to output '%s'!\n", module, out_file);
+            }
+            else {
+                printf("%s: Error: Failed writting output '%s'!\n", module, out_file);
+                iret = 1;
+            }
+        }
+        else {
+            printf("%s: Error: Can NOT open output '%s'!\n", module, out_file);
+            iret = 1;
+        }
+
+    }
     return iret;
 }
 

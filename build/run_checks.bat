@@ -6,8 +6,8 @@
 @if NOT EXIST %TMPEXE% goto NOEXE
 @set TMPOUT=%TMPCHK%.MD5
 @if EXIST %TMPOUT% @del %TMPOUT%
-@echo Doing: %TMPEXE% %TMPFIL% to %TMPOUT%
-@%TMPEXE% %TMPFIL% > %TMPOUT%
+@echo Doing: %TMPEXE% %TMPFIL% -o %TMPOUT%
+@%TMPEXE% %TMPFIL% -o %TMPOUT%
 @type %TMPOUT%
 @echo Doing: %TMPEXE% -c %TMPOUT%
 @%TMPEXE% -c %TMPOUT%
@@ -17,8 +17,8 @@
 @if NOT EXIST %TMPEXE% goto NOEXE
 @set TMPOUT=%TMPCHK%.SHA1
 @if EXIST %TMPOUT% @del %TMPOUT%
-@echo Doing: %TMPEXE% %TMPFIL% to %TMPOUT%
-@%TMPEXE% %TMPFIL% > %TMPOUT%
+@echo Doing: %TMPEXE% %TMPFIL% -o %TMPOUT%
+@%TMPEXE% %TMPFIL% -o %TMPOUT%
 @type %TMPOUT%
 @echo Doing: %TMPEXE% -c %TMPOUT%
 @%TMPEXE% -c %TMPOUT%
@@ -28,8 +28,8 @@
 @if NOT EXIST %TMPEXE% goto NOEXE
 @set TMPOUT=%TMPCHK%.SHA256
 @if EXIST %TMPOUT% @del %TMPOUT%
-@echo Doing: %TMPEXE% %TMPFIL% to %TMPOUT%
-@%TMPEXE% %TMPFIL% > %TMPOUT%
+@echo Doing: %TMPEXE% %TMPFIL% -o %TMPOUT%
+@%TMPEXE% %TMPFIL% -o %TMPOUT%
 @type %TMPOUT%
 @echo Doing: %TMPEXE% -c %TMPOUT%
 @%TMPEXE% -c %TMPOUT%

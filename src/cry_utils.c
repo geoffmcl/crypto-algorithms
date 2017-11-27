@@ -14,6 +14,8 @@
 static const char *module = "cry_utils";
 
 // implementation
+const char *get_cry_utils_module() { return module; }    /* just to remove gcc warning */
+
 /* Function which converts a hexadecimal digit character to its integer value */
 int hex_to_val(const char ch)
 {

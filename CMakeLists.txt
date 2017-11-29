@@ -141,34 +141,127 @@ endif ()
 # deal with install, if any...
 install( TARGETS ${name} DESTINATION bin )
 
-if (ADD_OTHER_EXES)
-# These have yet to be built implemented... WIP...
-
-set(name crypto-algotithms-fork)
+set(name aes_test)
 set(dir src)
 set(${name}_SRCS
     ${dir}/aes.c
     ${dir}/aes_test.c
+    )
+set(${name}_HDRS
+    ${dir}/aes.h
+    )
+add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
+if (add_LIBS)
+    target_link_libraries( ${name} ${add_LIBS} )
+endif ()
+if (MSVC)
+    set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
+endif ()
+# deal with install, if any...
+install( TARGETS ${name} DESTINATION bin )
+
+set(name arcfour_test)
+set(dir src)
+set(${name}_SRCS
     ${dir}/arcfour.c
     ${dir}/arcfour_test.c
+    )
+set(${name}_HDRS
+    ${dir}/arcfour.h
+    )
+add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
+if (add_LIBS)
+    target_link_libraries( ${name} ${add_LIBS} )
+endif ()
+if (MSVC)
+    set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
+endif ()
+# deal with install, if any...
+install( TARGETS ${name} DESTINATION bin )
+
+set(name base64_test)
+set(dir src)
+set(${name}_SRCS
     ${dir}/base64.c
     ${dir}/base64_test.c
+    )
+set(${name}_HDRS
+    ${dir}/base64.h
+    )
+add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
+if (add_LIBS)
+    target_link_libraries( ${name} ${add_LIBS} )
+endif ()
+if (MSVC)
+    set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
+endif ()
+# deal with install, if any...
+install( TARGETS ${name} DESTINATION bin )
+
+set(name blowfish_test)
+set(dir src)
+set(${name}_SRCS
     ${dir}/blowfish.c
     ${dir}/blowfish_test.c
+    )
+set(${name}_HDRS
+    ${dir}/blowfish.h
+    )
+add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
+if (add_LIBS)
+    target_link_libraries( ${name} ${add_LIBS} )
+endif ()
+if (MSVC)
+    set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
+endif ()
+# deal with install, if any...
+install( TARGETS ${name} DESTINATION bin )
+
+set(name des_test)
+set(dir src)
+set(${name}_SRCS
     ${dir}/des.c
     ${dir}/des_test.c
+    )
+set(${name}_HDRS
+    ${dir}/des.h
+    )
+add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
+if (add_LIBS)
+    target_link_libraries( ${name} ${add_LIBS} )
+endif ()
+if (MSVC)
+    set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
+endif ()
+# deal with install, if any...
+install( TARGETS ${name} DESTINATION bin )
+
+set(name md2_test)
+set(dir src)
+set(${name}_SRCS
     ${dir}/md2.c
     ${dir}/md2_test.c
+    )
+set(${name}_HDRS
+    ${dir}/md2.h
+    )
+add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
+if (add_LIBS)
+    target_link_libraries( ${name} ${add_LIBS} )
+endif ()
+if (MSVC)
+    set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
+endif ()
+# deal with install, if any...
+install( TARGETS ${name} DESTINATION bin )
+
+set(name rot-13_test)
+set(dir src)
+set(${name}_SRCS
     ${dir}/rot-13.c
     ${dir}/rot-13_test.c
     )
 set(${name}_HDRS
-    ${dir}/aes.h
-    ${dir}/arcfour.h
-    ${dir}/base64.h
-    ${dir}/blowfish.h
-    ${dir}/des.h
-    ${dir}/md2.h
     ${dir}/rot-13.h
     )
 add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
@@ -179,7 +272,6 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-#install( TARGETS ${name} DESTINATION bin )
-endif ()
+install( TARGETS ${name} DESTINATION bin )
 
 # eof

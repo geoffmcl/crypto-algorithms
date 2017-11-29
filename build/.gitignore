@@ -19,4 +19,11 @@ sha1_test
 sha256_test
 Makefile
 temp*
+aes_test
+arcfour_test
+base64_test
+blowfish_test
+des_test
+md2_test
+rot-13_test
 

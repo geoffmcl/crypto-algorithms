@@ -230,7 +230,7 @@ void des_key_setup(const BYTE key[], BYTE schedule[][6], DES_MODE mode)
 	}
 }
 
-void des_crypt(const BYTE in[], BYTE out[], const BYTE key[][6])
+void des_crypt(const BYTE in[], BYTE out[], BYTE key[][6])
 {
 	WORD state[2],idx,t;
 
@@ -261,7 +261,7 @@ void three_des_key_setup(const BYTE key[], BYTE schedule[][16][6], DES_MODE mode
 	}
 }
 
-void three_des_crypt(const BYTE in[], BYTE out[], const BYTE key[][16][6])
+void three_des_crypt(const BYTE in[], BYTE out[], BYTE key[][16][6])
 {
 	des_crypt(in,out,key[0]);
 	des_crypt(out,out,key[1]);

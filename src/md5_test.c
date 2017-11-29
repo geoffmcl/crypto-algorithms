@@ -74,6 +74,7 @@ static char out_buf[1024];
 void give_help(char *name)
 {
     printf("%s: usage: [options] usr_input\n", module);
+    printf("%s: %s\n", get_cry_utils_module(), get_cry_utils_version());
     printf("Options:\n");
     printf(" --help   (-h or -?) = This help and exit(0)\n");
     printf(" --upper        (-u) = Output string in uppercase.\n");
@@ -82,6 +83,7 @@ void give_help(char *name)
     printf(" --TEST         (-T) = Run the original 'tests' and exit(0)\n");
     printf(" --tag          (-t) = Create a BSD-style checksum.\n");
     printf(" --out <file>   (-o) = Write checksum to this file.\n");
+    printf(" --version      (-v) = Show help, utils version, and exit(0)\n");
     printf("\n");
     printf(" Print MD5 checksum for the 'input' file.\n");
     // TODO: More help
@@ -203,6 +205,7 @@ int parse_args(int argc, char **argv)
             switch (c) {
             case 'h':
             case '?':
+            case 'v':
                 give_help(argv[0]);
                 return 2;
                 break;

@@ -15,6 +15,7 @@ static const char *module = "cry_utils";
 
 // implementation
 const char *get_cry_utils_module() { return module; }    /* just to remove gcc warning */
+const char *get_cry_utils_version() { return "Version: " CRYPTO_VERSION ", Date: " CRYPTO_DATE; }    /* lib version and date */
 
 /* Function which converts a hexadecimal digit character to its integer value */
 int hex_to_val(const char ch)

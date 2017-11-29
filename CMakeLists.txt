@@ -11,12 +11,12 @@ project( crypto )
 set( crypto_MAJOR 3 )
 set( crypto_MINOR 0 )
 set( crypto_POINT 0 )
-
+add_definitions( -DCRYPTO_VERSION="${crypto_MAJOR}.${crypto_MINOR}.${crypto_POINT}" )
+add_definitions( -DCRYPTO_DATE="2017/11/29" )
 
 # Allow developer to select is Dynamic or static library built
 set( LIB_TYPE STATIC )  # set default static
 option( BUILD_SHARED_LIB "Set ON to build shared Library (DLL)" OFF )
-
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     set( WARNING_FLAGS -Wall )

@@ -10,6 +10,9 @@
 #define _CRY_UTILS_H_
 
 // add body
+extern const char *get_cry_utils_module();
+extern const char *get_cry_utils_version();
+
 extern int hex_to_val(const char ch);
 
 #ifdef _MSC_VER

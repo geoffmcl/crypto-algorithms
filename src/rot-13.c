@@ -18,7 +18,7 @@ void rot13(char str[])
 {
    int case_type, idx, len;
 
-   for (idx = 0, len = strlen(str); idx < len; idx++) {
+   for (idx = 0, len = (int)strlen(str); idx < len; idx++) {
       // Only process alphabetic characters.
       if (str[idx] < 'A' || (str[idx] > 'Z' && str[idx] < 'a') || str[idx] > 'z')
          continue;

@@ -14,6 +14,7 @@
 /*************************** HEADER FILES ***************************/
 #include <stdio.h>
 #include <memory.h>
+#include <string.h> // for strlen, ...
 #include "base64.h"
 
 /*********************** FUNCTION DEFINITIONS ***********************/

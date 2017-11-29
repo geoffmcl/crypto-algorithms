@@ -14,6 +14,7 @@
 /*************************** HEADER FILES ***************************/
 #include <stdio.h>
 #include <memory.h>
+#include <string.h> // for strlen, ...
 #include "arcfour.h"
 
 /*********************** FUNCTION DEFINITIONS ***********************/
@@ -31,7 +32,7 @@ int rc4_test()
 
 	// Only test the output stream. Note that the state can be reused.
 	for (idx = 0; idx < 3; idx++) {
-		arcfour_key_setup(state, key[idx], strlen(key[idx]));
+		arcfour_key_setup(state, key[idx], (int)strlen(key[idx]));
 		arcfour_generate_stream(state, buf, stream_len[idx]);
 		pass = pass && !memcmp(stream[idx], buf, stream_len[idx]);
 	}

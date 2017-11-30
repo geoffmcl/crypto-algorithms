@@ -154,7 +154,7 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-install( TARGETS ${name} DESTINATION bin )
+# install( TARGETS ${name} DESTINATION bin )
 
 set(name arcfour_test)
 set(dir src)
@@ -173,7 +173,7 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-install( TARGETS ${name} DESTINATION bin )
+# install( TARGETS ${name} DESTINATION bin )
 
 set(name base64_test)
 set(dir src)
@@ -192,7 +192,7 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-install( TARGETS ${name} DESTINATION bin )
+# install( TARGETS ${name} DESTINATION bin )
 
 set(name blowfish_test)
 set(dir src)
@@ -211,7 +211,7 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-install( TARGETS ${name} DESTINATION bin )
+# install( TARGETS ${name} DESTINATION bin )
 
 set(name des_test)
 set(dir src)
@@ -230,7 +230,7 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-install( TARGETS ${name} DESTINATION bin )
+# install( TARGETS ${name} DESTINATION bin )
 
 set(name md2_test)
 set(dir src)
@@ -249,7 +249,7 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-install( TARGETS ${name} DESTINATION bin )
+# install( TARGETS ${name} DESTINATION bin )
 
 set(name rot-13_test)
 set(dir src)
@@ -268,6 +268,6 @@ if (MSVC)
     set_target_properties( ${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
 # deal with install, if any...
-install( TARGETS ${name} DESTINATION bin )
+# install( TARGETS ${name} DESTINATION bin )
 
 # eof

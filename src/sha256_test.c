@@ -338,13 +338,14 @@ int main(int argc, char *argv[])
     int iret, i, c;
     BYTE buf[SHA256_BLOCK_SIZE];
     const char *form = "%02x";
+    const char *file;
     iret = parse_args(argc, argv);
     if (iret) {
         if (iret == 2)
             iret = 0;
         return iret;
     }
-    const char *file = usr_input;
+    file = usr_input;
     iret = get_checksum(file, buf);
     if (iret)
         return iret;

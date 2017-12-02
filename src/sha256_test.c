@@ -57,9 +57,9 @@ int sha256_test()
 
 int test_main()
 {
-	printf("SHA-256 tests: %s\n", sha256_test() ? "SUCCEEDED" : "FAILED");
-
-	return(0);
+    int pass = sha256_test();
+	printf("SHA-256 tests: %s\n", pass ? "SUCCEEDED" : "FAILED");
+	return (pass ? 0 : 1);
 }
 
 static const char *module = "sha256_test";
@@ -259,8 +259,8 @@ int parse_args(int argc, char **argv)
 
                 break;
             case 'T':
-                test_main();
-                return 2;
+                c = test_main();
+                return (c ? 1 : 2);
                 break;
             case 't':
                 BSD_Style = 1;

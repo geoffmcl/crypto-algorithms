@@ -56,9 +56,9 @@ int md5_test()
 
 int test_main()
 {
-	printf("MD5 tests: %s\n", md5_test() ? "SUCCEEDED" : "FAILED");
-
-	return(0);
+    int pass = md5_test();
+	printf("MD5 tests: %s\n", pass ? "SUCCEEDED" : "FAILED");
+	return (pass ? 0 : 1);
 }
 
 static const char *module = "md5_test";
@@ -257,8 +257,8 @@ int parse_args(int argc, char **argv)
 
                 break;
             case 'T':
-                test_main();
-                return 2;
+                c = test_main();
+                return (c ? 1 : 2);
                 break;
             case 't':
                 BSD_Style = 1;

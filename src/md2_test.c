@@ -54,7 +54,7 @@ int md2_test()
 
 int main()
 {
-	printf("MD2 tests: %s\n", md2_test() ? "SUCCEEDED" : "FAILED");
-
-    return 0;
+    int pass = md2_test();
+	printf("MD2 tests: %s\n", pass ? "SUCCEEDED" : "FAILED");
+    return (pass ? 0 : 1);
 }

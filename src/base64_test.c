@@ -49,7 +49,7 @@ int base64_test()
 
 int main()
 {
-	printf("Base64 tests: %s\n", base64_test() ? "PASSED" : "FAILED");
-
-	return 0;
+    int pass = base64_test();
+	printf("Base64 tests: %s\n", pass ? "PASSED" : "FAILED");
+	return (pass ? 0 : 1);
 }

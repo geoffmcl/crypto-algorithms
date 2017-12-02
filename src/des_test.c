@@ -77,7 +77,7 @@ int des_test()
 
 int main()
 {
-	printf("DES test: %s\n", des_test() ? "SUCCEEDED" : "FAILED");
-
-	return(0);
+    int pass = des_test();
+	printf("DES test: %s\n", pass ? "SUCCEEDED" : "FAILED");
+	return (pass ? 0 : 1);
 }

@@ -279,7 +279,7 @@ int aes_test()
 
 int main(int argc, char *argv[])
 {
-	printf("AES Tests: %s\n", aes_test() ? "SUCCEEDED" : "FAILED");
-
-	return(0);
+    int pass = aes_test();
+	printf("AES Tests: %s\n", pass ? "SUCCEEDED" : "FAILED");
+	return (pass ? 0 : 1);
 }

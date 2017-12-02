@@ -62,7 +62,7 @@ int blowfish_test()
 
 int main()
 {
-	printf("Blowfish tests: %s\n", blowfish_test() ? "SUCCEEDED" : "FAILED");
-
-	return(0);
+    int pass = blowfish_test();
+	printf("Blowfish tests: %s\n",  pass ? "SUCCEEDED" : "FAILED");
+	return (pass ? 0 : 1);
 }

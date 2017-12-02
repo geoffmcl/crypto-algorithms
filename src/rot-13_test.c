@@ -38,7 +38,7 @@ int rot13_test()
 
 int main()
 {
-	printf("ROT-13 tests: %s\n", rot13_test() ? "SUCCEEDED" : "FAILED");
-
-	return(0);
+    int pass = rot13_test();
+	printf("ROT-13 tests: %s\n", pass ? "SUCCEEDED" : "FAILED");
+	return (pass ? 0 : 1);
 }

@@ -42,7 +42,7 @@ int rc4_test()
 
 int main()
 {
-	printf("ARCFOUR tests: %s\n", rc4_test() ? "SUCCEEDED" : "FAILED");
-
-	return(0);
+    int pass = rc4_test();
+	printf("ARCFOUR tests: %s\n", pass ? "SUCCEEDED" : "FAILED");
+	return (pass ? 0 : 1);
 }

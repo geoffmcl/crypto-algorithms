@@ -6,6 +6,9 @@ BN=`basename $0`
 TMPSRC=".."
 TMPCM="$TMPSRC/CMakeLists.txt"
 TMPLOG="bldlog-1.txt"
+TMPPRJ="crypto"
+TMPTIME=`date +%H:%M:%S`
+TMPDATE=`date +%Y/%m/%d`
 
 wait_for_input()
 {
@@ -38,14 +41,18 @@ if [ ! -f "$TMPCM" ]; then
     exit 1
 fi
 
-CMOPTS=""
+TMPOPTS=""
 VERSBOSE=0
 NOSG=1
 DO_CMAKE=1
-
-if [ -f "$TMPLOG" ]; then
-    rm -f $TMPLOG
-fi
+BLDDBG=0
+##############################################
+### ***** NOTE THIS INSTALL LOCATION ***** ###
+### Change to suit your taste, environment ###
+# TMPINST="/usr"
+TMPINST="$HOME"
+TMPOPTS="$TMPOPTS -DCMAKE_INSTALL_PREFIX=$TMPINST"
+##############################################
 
 give_help()
 {
@@ -53,6 +60,7 @@ give_help()
     echo "OPTIONS"
     echo " VERBOSE = Use verbose build"
     echo " CLEAN   = Clean and exit."
+    echo " DEBUG   = Build Debug version."
     echo " NOCMAKE = Do NOT do cmake configuration if a Makefile exists."
     echo ""
     exit 1
@@ -72,6 +80,7 @@ for arg in $@; do
          VERBOSE) VERBOSE=1 ;;
          CLEAN) do_clean ;;
          NOCMAKE) DO_CMAKE=0 ;;
+         DEBUG) BLDDBG=1 ;;
          --help) give_help ;;
          -h) give_help ;;
          -\?) give_help ;;
@@ -82,18 +91,29 @@ for arg in $@; do
       esac
 done
 
-echo "$BN: Commence build of fgio..." > $TMPLOG
+if [ -f "$TMPLOG" ]; then
+    rm -f $TMPLOG
+fi
+
+
+if [ "$BLDDBG" = "1" ]; then
+    TMPOPTS="$TMPOPTS -DCMAKE_BUILD_TYPE=Debug"
+else
+    TMPOPTS="$TMPOPTS -DCMAKE_BUILD_TYPE=Release"
+fi
+
+echo "$BN: Build of $TMPPRJ $TMPDATE $TMPTIME..." > $TMPLOG
 
 if [ "$VERBOSE" = "1" ]; then
-    CMOPTS="$CMOPTS -DCMAKE_VERBOSE_MAKEFILE=TRUE"
+    TMPOPTS="$TMPOPTS -DCMAKE_VERBOSE_MAKEFILE=TRUE"
     echo "$BN: Enabling VERBOSE make"
     echo "$BN: Enabling VERBOSE make" >> $TMPLOG
 fi
 
 if [ ! -f "Makefile" ] || [ "$DO_CMAKE" = "1" ]; then
-    echo "$BN: Doing: 'cmake $CMOPTS $TMPSRC', output to $TMPLOG"
-    echo "$BN: Doing: 'cmake $CMOPTS $TMPSRC'" >> $TMPLOG
-    cmake $CMOPTS $TMPSRC >> $TMPLOG 2>&1
+    echo "$BN: Doing: 'cmake $TMPOPTS $TMPSRC', output to $TMPLOG"
+    echo "$BN: Doing: 'cmake $TMPOPTS $TMPSRC'" >> $TMPLOG
+    cmake $TMPOPTS $TMPSRC >> $TMPLOG 2>&1
     if [ ! "$?" = "0" ]; then
         echo "$BN: cmake configuration, generation error, see $TMPLOG"
         exit 1

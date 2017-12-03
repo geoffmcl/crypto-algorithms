@@ -10,9 +10,9 @@ project( crypto )
 # The version number.
 set( crypto_MAJOR 3 )
 set( crypto_MINOR 0 )
-set( crypto_POINT 0 )
+set( crypto_POINT 2 )
 add_definitions( -DCRYPTO_VERSION="${crypto_MAJOR}.${crypto_MINOR}.${crypto_POINT}" )
-add_definitions( -DCRYPTO_DATE="2017/11/29" )
+add_definitions( -DCRYPTO_DATE="2017/12/02" )
 
 # Allow developer to select is Dynamic or static library built
 set( LIB_TYPE STATIC )  # set default static

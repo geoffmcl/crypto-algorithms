@@ -1,5 +1,6 @@
 #!/bin/sh
 
+TMPFAIL=""
 TMPFIL="bldlog-1.txt"
 if [ ! -f "$TMPFIL" ]; then
     echo "Can NOT locate '$TMPFIL'! *** FIX ME ***"
@@ -24,6 +25,9 @@ cat $TMPOUT
 echo ""
 echo "Doing: '$TMPEXE -c $TMPOUT'"
 ./$TMPEXE -c $TMPOUT
+if [ ! "$?" = "0" ]; then
+    TMPFAIL="$TMPFAIL MD5"
+fi
 echo ""
 
 
@@ -42,6 +46,9 @@ cat $TMPOUT
 echo ""
 echo "Doing: '$TMPEXE -c $TMPOUT'"
 ./$TMPEXE -c $TMPOUT
+if [ ! "$?" = "0" ]; then
+    TMPFAIL="$TMPFAIL SHA1"
+fi
 echo ""
 
 TMPEXE="sha256_test"
@@ -59,6 +66,17 @@ cat $TMPOUT
 echo ""
 echo "Doing: '$TMPEXE -c $TMPOUT'"
 ./$TMPEXE -c $TMPOUT
+if [ ! "$?" = "0" ]; then
+    TMPFAIL="$TMPFAIL MD5"
+fi
+echo ""
+
+if [ -z "$TMPFAIL" ]; then
+    echo "Appear ALL checks PASSED"
+else
+    echo "check $TMPFAIL FAILED"
+fi
 echo ""
 
 # eof
+

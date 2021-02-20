@@ -1,33 +1,26 @@
 @setlocal
 @set ADDINST=0
-@REM 20210220 - Change to msvc160 build
-@set VCVERS=16
-@set GENERATOR=Visual Studio %VCVERS% 2019
-@set TMPROOT=D:\Projects
 @REM 20161002 - Change to msvc140 build
-@REM set VCVERS=14
-@REM set GENERATOR=Visual Studio %VCVERS% Win64
-@REM set TMPROOT=F:\Projects
+@set VCVERS=14
+@set GENERATOR=Visual Studio %VCVERS% Win64
 @REM 20160324 - Change to relative, and use choice
 @set TMPPRJ=crypto
 @echo Build %TMPPRJ% project, in 64-bits
 @set TMPLOG=bldlog-1.txt
 @set BLDDIR=%CD%
-
-@REM set SET_BAT=%ProgramFiles(x86)%\Microsoft Visual Studio %VCVERS%.0\VC\vcvarsall.bat
-@REM if NOT EXIST "%SET_BAT%" goto NOBAT
+@set TMPROOT=F:\Projects
+@set SET_BAT=%ProgramFiles(x86)%\Microsoft Visual Studio %VCVERS%.0\VC\vcvarsall.bat
+@if NOT EXIST "%SET_BAT%" goto NOBAT
 @REM if NOT EXIST %TMPROOT%\nul goto NOROOT
 @set TMPSRC=..
 @if NOT EXIST %TMPSRC%\CMakeLists.txt goto NOCM
 @set DOPAUSE=1
 
 @if /I "%PROCESSOR_ARCHITECTURE%" EQU "AMD64" (
-@REM set TMPINST=%TMPROOT%\software.x64
-@set TMPINST=%TMPROOT%\3rdParty.x64
+@set TMPINST=%TMPROOT%\software.x64
 ) ELSE (
  @if /I "%PROCESSOR_ARCHITECTURE%" EQU "x86_64" (
-@set TMPINST=%TMPROOT%\3rdParty.x64
-@REM set TMPINST=%TMPROOT%\software.x64
+@set TMPINST=%TMPROOT%\software.x64
  ) ELSE (
 @echo ERROR: Appears 64-bit is NOT available... aborting...
 @goto ISERR
@@ -38,14 +31,12 @@
 @echo Doing build output to %TMPLOG%
 @echo Doing build output to %TMPLOG% > %TMPLOG%
 
-@goto DNSETUP
 @echo Doing: 'call "%SET_BAT%" %PROCESSOR_ARCHITECTURE%'
 @echo Doing: 'call "%SET_BAT%" %PROCESSOR_ARCHITECTURE%' >> %TMPLOG%
 @call "%SET_BAT%" %PROCESSOR_ARCHITECTURE% >> %TMPLOG% 2>&1
 @if ERRORLEVEL 1 goto ERR0
 @REM call setupqt64
 @cd %BLDDIR%
-:DNSETUP
 
 @REM :DNARCH
 
@@ -55,9 +46,8 @@
 @REM ##########################################
 @REM set TMPINST=F:\Projects\software.x64
 @set TMPOPTS=-DCMAKE_INSTALL_PREFIX=%TMPINST%
-@set TMPOPTS=%TMPOPTS% -G "%GENERATOR%" -A x64
+@set TMPOPTS=%TMPOPTS% -G "%GENERATOR%"
 @REM set TMPOPTS=%TMPOPTS% -DBUILD_SHARED_LIB:BOOL=OFF
-@set TMPOPTS=%TMPOPTS% -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
 
 :RPT
 @if "%~1x" == "x" goto GOTCMD
@@ -77,7 +67,7 @@
 
 @echo Doing: 'cmake %TMPSRC% %TMPOPTS%'
 @echo Doing: 'cmake %TMPSRC% %TMPOPTS%' >> %TMPLOG%
-@cmake -S %TMPSRC% %TMPOPTS% >> %TMPLOG% 2>&1
+@cmake %TMPSRC% %TMPOPTS% >> %TMPLOG% 2>&1
 @if ERRORLEVEL 1 goto ERR1
 
 @echo Doing: 'cmake --build . --config debug'
@@ -152,7 +142,7 @@
 @echo.
 @goto END
 
-@REM :NOBAT
+:NOBAT
 @echo Can NOT locate MSVC setup batch "%SET_BAT%"! *** FIX ME ***
 @goto ISERR
 
